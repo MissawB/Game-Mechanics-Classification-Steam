@@ -39,4 +39,4 @@ Le projet s'appuie sur des travaux académiques de référence :
     └── README.md           # Présentation du projet
 
 ## 🔗 Ressources Externes
-**Bibliographie complète** : Retrouvez l'ensemble de nos sources sur notre [Librairie Zotero Groupée](https://www.google.com/search?q=https://www.zotero.org/groups/6288352/pdr_stearn/library).
+**Bibliographie complète** : Retrouvez l'ensemble de nos sources sur notre [Librairie Zotero Groupée](https://www.zotero.org/groups/6288352/pdr_stearn/library).
