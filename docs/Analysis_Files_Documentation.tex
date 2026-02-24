@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Documentation des Fichiers d'Analyse - Classification des Mécaniques Steam}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Ce document détaille la raison d'être et la méthodologie de chaque fichier présent dans le répertoire 	\texttt{analysis/}. L'objectif global est de transformer une folksonomie non-supervisée (tags Steam) en une base de données de mécaniques de jeu structurée et exploitable.
+
+\section{Description des Fichiers}
+
+\subsection{Analyse base de données.ipynb}
+	\textbf{Rôle :} Exploration initiale du schéma SQLite.
+\begin{itemize}
+    \item Identifie les tables clés (ex : \texttt{games}, 	\texttt{tags}, 	\texttt{game\_tag}).
+    \item Analyse la distribution brute des tags.
+    \item Première tentative d'extraction de règles d'association via l'algorithme FP-Growth.
+\end{itemize}
+
+\subsection{Gameplay\_Tag\_Taxonomy.ipynb}
+	\textbf{Rôle :} Restructuration sémantique (Axe 1 \& 3).
+\begin{itemize}
+    \item 	\textbf{Base théorique :} S'appuie sur le 	\textit{Video Game Metadata Schema} (VGMS) et l'étude 	\textit{Full Steam Ahead} (Windleharth et al.).
+    \item 	\textbf{Action :} Filtre le bruit (tags de distribution) et mappe les tags restants dans 8 dimensions ludologiques (Genre, Mechanics, Theme, Setting, Mood, Aesthetics, Perspective, Players).
+    \item 	\textbf{Sortie :} Génère 	\texttt{data/Games\_Gameplay\_Taxonomy.csv}.
+\end{itemize}
+
+\subsection{Network\_Analysis\_Cooccurrence.ipynb}
+	\textbf{Rôle :} Analyse de réseau et affinités de design (Axe 2).
+\begin{itemize}
+    \item 	\textbf{Méthodologie :} Calcule la co-occurrence entre Genres et Mécaniques.
+    \item 	\textbf{Indicateur :} Utilisation du 	\textit{Lift} pour identifier les corrélations non-aléatoires (affinités réelles).
+    \item 	\textbf{Visualisation :} Graphe d'affinités montrant comment les mécaniques gravitent autour des genres.
+\end{itemize}
+
+\subsection{Folksonomic\_Clustering\_Analysis.ipynb}
+	\textbf{Rôle :} Découverte de structures émergentes (Axe 2 \& Modèle Elverdam/Aarseth).
+\begin{itemize}
+    \item 	\textbf{Approche :} Utilise la similarité de cosinus entre les tags et l'algorithme de Louvain.
+    \item 	\textbf{Objectif :} Identifier des ``Genres Folksonomiques'' basés sur l'usage réel des joueurs plutôt que sur des catégories marketing prédéfinies.
+\end{itemize}
+
+\subsection{Expert\_vs\_Folksonomy\_Comparison.ipynb}
+	extbf{Rôle :} Validation de la folksonomie (Lu, Park \& Hu, 2010).
+\begin{itemize}
+    \item 	\textbf{Action :} Compare les genres officiels (Experts) et les tags utilisateurs.
+    \item 	\textbf{Conclusion :} Démontre la plus-value descriptive des joueurs sur les mécaniques fines et l'ambiance, validant l'intérêt de la base de données structurée.
+\end{itemize}
+
+\section{Dépendances}
+Le fichier 	\texttt{requirements.txt} à la racine du projet contient l'ensemble des bibliothèques nécessaires pour exécuter ces analyses.
+
+\end{document}
