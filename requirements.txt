@@ -1,3 +1,4 @@
+imbalanced-learn
 pandas
 numpy
 matplotlib
@@ -6,3 +7,4 @@ networkx
 python-louvain
 scikit-learn
 sqlite3
+xgboost

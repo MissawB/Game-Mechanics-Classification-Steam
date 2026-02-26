@@ -12,46 +12,63 @@
 \maketitle
 
 \section{Introduction}
-Ce document détaille la raison d'être et la méthodologie de chaque fichier présent dans le répertoire 	\texttt{analysis/}. L'objectif global est de transformer une folksonomie non-supervisée (tags Steam) en une base de données de mécaniques de jeu structurée et exploitable.
+Ce document détaille la raison d'être et la méthodologie de chaque fichier présent dans le répertoire \texttt{analysis/}, ainsi que les rapports de validation associés. L'objectif global est de transformer une folksonomie non-supervisée (tags Steam) en une base de données de mécaniques de jeu structurée, validée par des métriques de cohérence et enrichie par des modèles de Machine Learning. Le projet couvre plus de 126 000 jeux provenant de la plateforme de jeux Steam.
 
-\section{Description des Fichiers}
+\section{Description des Fichiers d'Analyse}
 
-\subsection{Analyse base de données.ipynb}
-	\textbf{Rôle :} Exploration initiale du schéma SQLite.
+\subsection{1\_First\_Data\_Base\_Analysis.ipynb}
+	\textbf{Rôle :} Exploration initiale et structuration de la base de données SQLite.
 \begin{itemize}
-    \item Identifie les tables clés (ex : \texttt{games}, 	\texttt{tags}, 	\texttt{game\_tag}).
-    \item Analyse la distribution brute des tags.
+    \item Identifie les tables clés (ex : \texttt{games}, \texttt{tags}, \texttt{game\_tag}).
+    \item Analyse la distribution brute des tags et la représentativité des jeux.
     \item Première tentative d'extraction de règles d'association via l'algorithme FP-Growth.
 \end{itemize}
 
-\subsection{Gameplay\_Tag\_Taxonomy.ipynb}
-	\textbf{Rôle :} Restructuration sémantique (Axe 1 \& 3).
+\subsection{2\_Gameplay\_Tag\_Taxonomy.ipynb}
+	\textbf{Rôle :} Restructuration sémantique et enrichissement de la taxonomie (Axe 1 \& 3).
 \begin{itemize}
-    \item 	\textbf{Base théorique :} S'appuie sur le 	\textit{Video Game Metadata Schema} (VGMS) et l'étude 	\textit{Full Steam Ahead} (Windleharth et al.).
-    \item 	\textbf{Action :} Filtre le bruit (tags de distribution) et mappe les tags restants dans 8 dimensions ludologiques (Genre, Mechanics, Theme, Setting, Mood, Aesthetics, Perspective, Players).
-    \item 	\textbf{Sortie :} Génère 	\texttt{data/Games\_Gameplay\_Taxonomy.csv}.
+    \item \textbf{Base théorique :} S'appuie sur le \textit{Video Game Metadata Schema} (VGMS).
+    \item \textbf{Action :} Filtre le bruit (tags de distribution), normalise les variantes (ex: Rogue-like vs Roguelike) et mappe les tags dans 8 dimensions ludologiques (Genre, Mechanics, Theme, Setting, Mood, Aesthetics, Perspective, Players).
+    \item \textbf{Sortie :} Génère \texttt{data/Games\_Gameplay\_Taxonomy.csv}, couvrant 100 384 jeux de manière structurée.
 \end{itemize}
 
-\subsection{Network\_Analysis\_Cooccurrence.ipynb}
+\subsection{3\_Network\_Analysis\_Cooccurrence.ipynb}
 	\textbf{Rôle :} Analyse de réseau et affinités de design (Axe 2).
 \begin{itemize}
-    \item 	\textbf{Méthodologie :} Calcule la co-occurrence entre Genres et Mécaniques.
-    \item 	\textbf{Indicateur :} Utilisation du 	\textit{Lift} pour identifier les corrélations non-aléatoires (affinités réelles).
-    \item 	\textbf{Visualisation :} Graphe d'affinités montrant comment les mécaniques gravitent autour des genres.
+    \item \textbf{Méthodologie :} Calcule la co-occurrence entre Genres et Mécaniques.
+    \item \textbf{Indicateur :} Utilisation du \textit{Lift} pour identifier les corrélations non-aléatoires (affinités réelles).
+    \item \textbf{Visualisation :} Graphe d'affinités montrant comment les mécaniques gravitent autour des genres dominants.
 \end{itemize}
 
-\subsection{Folksonomic\_Clustering\_Analysis.ipynb}
+\subsection{4\_Folksonomic\_Clustering\_Analysis.ipynb}
 	\textbf{Rôle :} Découverte de structures émergentes (Axe 2 \& Modèle Elverdam/Aarseth).
 \begin{itemize}
-    \item 	\textbf{Approche :} Utilise la similarité de cosinus entre les tags et l'algorithme de Louvain.
-    \item 	\textbf{Objectif :} Identifier des ``Genres Folksonomiques'' basés sur l'usage réel des joueurs plutôt que sur des catégories marketing prédéfinies.
+    \item \textbf{Approche :} Utilise la similarité de cosinus entre les tags et l'algorithme de Louvain pour détecter des clusters.
+    \item \textbf{Objectif :} Identifier des ``Genres Folksonomiques'' basés sur l'usage réel des joueurs plutôt que sur des catégories marketing.
 \end{itemize}
 
-\subsection{Expert\_vs\_Folksonomy\_Comparison.ipynb}
-	extbf{Rôle :} Validation de la folksonomie (Lu, Park \& Hu, 2010).
+\subsection{5\_Expert\_vs\_Folksonomy\_Comparison.ipynb}
+	\textbf{Rôle :} Validation de la folksonomie par rapport aux classifications officielles.
 \begin{itemize}
-    \item 	\textbf{Action :} Compare les genres officiels (Experts) et les tags utilisateurs.
-    \item 	\textbf{Conclusion :} Démontre la plus-value descriptive des joueurs sur les mécaniques fines et l'ambiance, validant l'intérêt de la base de données structurée.
+    \item \textbf{Action :} Compare les genres officiels Steam (Experts) et les tags utilisateurs (Folksonomie).
+    \item \textbf{Conclusion :} Démontre la plus-value descriptive des joueurs sur les mécaniques fines et l'ambiance.
+\end{itemize}
+
+\subsection{6\_Machine\_Learning\_Classification.ipynb}
+	\textbf{Rôle :} Modélisation prédictive de la classification des jeux.
+\begin{itemize}
+    \item \textbf{Objectif :} Prédire le genre principal d'un jeu à partir de ses autres attributs (mécaniques, thèmes, etc.).
+    \item \textbf{Modèles :} Utilise Random Forest, XGBoost et des modèles d'ensemble (Voting Classifier).
+    \item \textbf{Techniques :} Gestion du déséquilibre des classes via SMOTE et optimisation des hyperparamètres.
+\end{itemize}
+
+\section{Rapports de Validation et de Synthèse}
+
+En complément des notebooks, le répertoire \texttt{reports/} contient des documents de synthèse sur la fiabilité des données :
+
+\begin{itemize}
+    \item \textbf{classification\_consistency\_report.md :} Analyse de la couverture de la taxonomie sur les jeux récents (2025) et identification des lacunes (synonymes manquants, nouveaux tags émergents).
+    \item \textbf{classification\_update\_report.md :} Documente les mesures correctives apportées (normalisation automatique, expansion des dimensions) et la fusion des jeux de données pour atteindre un total de 126 244 jeux uniques.
 \end{itemize}
 
 \section{Dépendances}
