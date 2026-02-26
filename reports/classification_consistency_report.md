@@ -1,7 +1,7 @@
-# Rapport de Cohérence de la Classification des Tags Steam
+# Rapport de Cohérence de la Classification des Tags Steam de 2025
 
 ## 1. Vue d'Ensemble
-Ce test a été effectué sur les jeux sortis après le **13 décembre 2024** (date de la dernière base de données de référence).
+Cette base de données couvre les jeux sortis après le **13 décembre 2024** (date de la dernière base de données de référence).
 - **Nombre total de nouveaux jeux extraits** : 25 862
 
 ## 2. Statistiques de Couverture

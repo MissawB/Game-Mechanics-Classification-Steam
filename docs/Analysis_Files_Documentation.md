@@ -46,6 +46,12 @@ Ce document détaille la raison d'être et la méthodologie de chaque fichier pr
 - **Modèles :** Random Forest, XGBoost et Voting Classifier.
 - **Techniques :** Gestion du déséquilibre des classes via SMOTE et optimisation des hyperparamètres (GridSearch/RandomizedSearch).
 
+### 7. NLP_Deep_Learning_Enrichment.ipynb
+**Rôle :** Enrichissement sémantique et nommage automatique des clusters.
+- **Approche :** Utilise des modèles de **Deep Learning** (Sentence-BERT via `sentence-transformers`) pour transformer les tags en embeddings vectoriels riches.
+- **Nommage Automatique :** Calcule le centroïde des embeddings pour chaque cluster (issu de l'algorithme de Louvain) afin d'identifier le terme le plus représentatif par similarité cosinus.
+- **Conclusion :** Démontre que les clusters folksonomiques possèdent une forte cohérence sémantique, permettant d'automatiser l'étiquetage des genres émergents (ex: *Visual Novel*, *Roguelike Deckbuilder*) avec une précision ludologique élevée.
+
 ## Rapports de Validation et de Synthèse
 
 Le répertoire `reports/` contient des documents de synthèse sur l'évolution de la base :
@@ -54,4 +60,4 @@ Le répertoire `reports/` contient des documents de synthèse sur l'évolution d
 - **classification_update_report.md :** Synthèse des mesures de normalisation et de la fusion des datasets (126 244 jeux uniques).
 
 ## Dépendances
-Le fichier `requirements.txt` à la racine du projet contient l'ensemble des bibliothèques nécessaires (Pandas, Scikit-learn, NetworkX, XGBoost, etc.).
+Le fichier `requirements.txt` à la racine du projet contient l'ensemble des bibliothèques nécessaires (Pandas, Scikit-learn, NetworkX, XGBoost, sentence-transformers, etc.).
