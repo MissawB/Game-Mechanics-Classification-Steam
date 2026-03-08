@@ -6,58 +6,61 @@ Ce document détaille la raison d'être et la méthodologie de chaque fichier pr
 ## Description des Fichiers d'Analyse
 
 ### 1. First_Data_Base_Analysis.ipynb
-**Rôle :** Exploration initiale et structuration de la base de données SQLite.
-- Identifie les tables clés (ex : `games`, `tags`, `game_tag`).
-- Analyse la distribution brute des tags et la représentativité des jeux.
-- Première tentative d'extraction de règles d'association via l'algorithme FP-Growth.
+**Rôle :** Exploration initiale de la folksonomie Steam.
+- Identifie les tables clés de la base SQLite originale (`games`, `tags`, `game_tag`).
+- Analyse la distribution des tags (Loi de Pareto) et identifie le bruit initial.
+- **Règles d'association :** Première extraction de relations fortes via l'algorithme **FP-Growth** (ex: liens NSFW/Hentai isolés du gameplay).
 
 ### 2. Gameplay_Tag_Taxonomy.ipynb
-**Rôle :** Restructuration sémantique et enrichissement de la taxonomie (Axe 1 & 3).
-- **Base théorique :** S'appuie sur le *Video Game Metadata Schema* (VGMS).
-- **Action :** Filtre le bruit (tags de distribution), normalise les variantes (ex: Rogue-like vs Roguelike) et mappe les tags dans 8 dimensions ludologiques (Genre, Mechanics, Theme, Setting, Mood, Aesthetics, Perspective, Players).
-- **Sortie :** Génère `data/Games_Gameplay_Taxonomy.csv`, la base de référence consolidée.
+**Rôle :** Restructuration sémantique et création de la taxonomie de référence.
+- **Base théorique :** S'appuie sur le *Video Game Metadata Schema* (VGMS) et les travaux de Windleharth et al.
+- **Action :** Filtre les tags de distribution, normalise les variantes (Rogue-like vs Roguelike) et classe les tags dans 8 dimensions (Genre, Mechanics, Theme, Setting, Mood, Aesthetics, Perspective, Players).
+- **Sortie :** Génère `data/Games_Gameplay_Taxonomy.csv`.
 
 ### 3. Network_Analysis_Cooccurrence.ipynb
-**Rôle :** Analyse de réseau et affinités de design (Axe 2).
-- **Méthodologie :** Calcule la co-occurrence entre Genres et Mécaniques.
-- **Indicateur :** Utilisation du **Lift** pour identifier les corrélations non-aléatoires (affinités de design réelles).
-- **Visualisation :** Graphe d'affinités montrant comment les mécaniques gravitent autour des genres dominants et identification de pôles structurels (Action-RPG, Réflexion, Narration).
-- **Note :** Cette étape valide la cohérence de la taxonomie avant le clustering profond.
+**Rôle :** Analyse de réseau et affinités de design.
+- **Méthodologie :** Utilise le **Lift** pour identifier les corrélations non-aléatoires entre dimensions.
+- **Topologie :** Identification de trois écosystèmes distincts (Puzzles, Visual Novels, et le "Grand Continent" Roguelike/RPG).
+- **Centralité :** Repère les tags "Hubs" (Sandbox, Management) et les "Ponts" (Strategy, Turn-Based Combat).
+- **Analyse Temporelle :** Évolution de la popularité des genres et mécaniques de 2010 à 2025.
 
 ### 4. Folksonomic_Clustering_Analysis.ipynb
-**Rôle :** Découverte de structures émergentes (Axe 2 & Modèle Elverdam/Aarseth).
-- **Approche :** Utilise la similarité de cosinus entre les tags pour cartographier l'espace de design.
-- **Méthodes de Clustering :**
-    - **Algorithme de Louvain :** Détection de communautés basée sur la structure du graphe.
-    - **Dendrogramme :** Clustering hiérarchique avec seuil de coupure visuel (Ward distance) pour identifier les niveaux d'agrégation.
-    - **GMM (Gaussian Mixture Model) :** Approche probabiliste pour la gestion des chevauchements.
-    - **OPTICS :** Détection de clusters basée sur la densité, permettant d'isoler le bruit (tags non-structurels).
-    - **K-Medoids (PAM) :** Identification de tags "médoides" représentatifs pour chaque cluster de gameplay.
-- **Objectif :** Identifier des "Genres Folksonomiques" basés sur l'usage réel des joueurs.
+**Rôle :** Découverte de genres émergents par clustering non-supervisé.
+- **Approche :** Similarité de cosinus sur la présence des tags.
+- **Méthodes :** 
+    - **Algorithme de Louvain :** Détection de 42 communautés sémantiques.
+    - **Validation :** Score de Silhouette, Index Davies-Bouldin et test de **stabilité par Bootstrap**.
+- **Exploration :** Visualisation **t-SNE 3D interactive** et analyse de la "longue traîne" via OPTICS (détection du bruit).
+- **Temporalité :** Suivi de l'émergence et de la croissance des clusters dans le temps.
 
 ### 5. Expert_vs_Folksonomy_Comparison.ipynb
-**Rôle :** Validation de la folksonomie par rapport aux classifications officielles.
-- **Action :** Compare les genres officiels Steam (Experts) et les tags utilisateurs (Folksonomie).
-- **Conclusion :** Démontre la plus-value descriptive des joueurs sur les mécaniques fines et l'ambiance, validant l'utilité du projet.
+**Rôle :** Étude du fossé entre classifications officielles et perception des joueurs.
+- **Action :** Compare les genres officiels (Experts) et les tags (Folksonomie).
+- **Richesse :** Démontre que les joueurs apportent 1.6x plus d'informations descriptives que les experts.
+- **Accord Temporel :** Mise en évidence d'un **fossé grandissant** : les joueurs sont de moins en moins d'accord avec les étiquettes officielles sur les jeux récents.
+- **Mapping :** Heatmap de correspondance montrant comment les genres officiels se projettent sur les réalités du gameplay folksonomique.
 
 ### 6. Machine_Learning_Classification.ipynb
-**Rôle :** Modélisation prédictive de la classification des jeux.
-- **Objectif :** Prédire le genre principal d'un jeu à partir de ses autres attributs (mécaniques, thèmes, etc.).
-- **Modèles :** Random Forest, XGBoost et Voting Classifier.
-- **Techniques :** Gestion du déséquilibre des classes via SMOTE et optimisation des hyperparamètres (GridSearch/RandomizedSearch).
+**Rôle :** Modélisation prédictive du genre principal.
+- **Ingénierie :** Encodage multi-hot et **sélection de caractéristiques via test Chi2** (réduction du bruit).
+- **Modèles :** Random Forest, XGBoost et **Stacking Classifier** (méta-modèle Gradient Boosting).
+- **Rigueur :** Utilisation de la **Validation Croisée Stratifiée** et gestion du déséquilibre des classes via SMOTE.
+- **Diagnostic :** Analyse de l'importance des caractéristiques pour chaque grand genre.
 
 ### 7. NLP_Deep_Learning_Enrichment.ipynb
-**Rôle :** Enrichissement sémantique et nommage automatique des clusters.
-- **Approche :** Utilise des modèles de **Deep Learning** (Sentence-BERT via `sentence-transformers`) pour transformer les tags en embeddings vectoriels riches.
-- **Nommage Automatique :** Calcule le centroïde des embeddings pour chaque cluster (issu de l'algorithme de Louvain) afin d'identifier le terme le plus représentatif par similarité cosinus.
-- **Conclusion :** Démontre que les clusters folksonomiques possèdent une forte cohérence sémantique, permettant d'automatiser l'étiquetage des genres émergents (ex: *Visual Novel*, *Roguelike Deckbuilder*) avec une précision ludologique élevée.
+**Rôle :** Analyse sémantique fine par Embeddings.
+- **Technologie :** Utilisation de modèles **Transformer (BERT)** avancés (`all-mpnet-base-v2`).
+- **Nommage Automatique :** Identification des labels de clusters par calcul de centroïde sémantique.
+- **Cohérence :** Analyse de la variance intra-cluster et détection des **outliers sémantiques** (tags mal classés).
+- **Relations :** Heatmap de similarité entre clusters pour identifier les **Super-Genres**.
 
-## Rapports de Validation et de Synthèse
+## Scripts de Traitement et Maintenance
 
-Le répertoire `reports/` contient des documents de synthèse sur l'évolution de la base :
-
-- **classification_consistency_report.md :** Analyse de la couverture sur les jeux de 2025 et identification des tags émergents.
-- **classification_update_report.md :** Synthèse des mesures de normalisation et de la fusion des datasets (126 244 jeux uniques).
+### New_Games_Gameplay_Taxonomy_Creation.py
+**Rôle :** Pipeline d'automatisation et mise à jour de la base.
+- **Source :** Extraction Kaggle (Steam Games Dataset).
+- **Logique :** Filtrage post-2024, application de la taxonomie enrichie (Horror, Exploration, etc.), normalisation automatique et stratégie de repli (Fallback) sur les genres officiels si les tags sont absents.
+- **Livrables :** `New_Games_Gameplay_Taxonomy.csv` et `final_test_set_15k.csv`.
 
 ## Dépendances
-Le fichier `requirements.txt` à la racine du projet contient l'ensemble des bibliothèques nécessaires (Pandas, Scikit-learn, NetworkX, XGBoost, sentence-transformers, etc.).
+Le fichier `requirements.txt` contient l'ensemble des bibliothèques nécessaires (Pandas, Scikit-learn, NetworkX, XGBoost, mlxtend, sentence-transformers, plotly, etc.).
