@@ -54,6 +54,12 @@ Ce document détaille la raison d'être et la méthodologie de chaque fichier pr
 - **Cohérence :** Analyse de la variance intra-cluster et détection des **outliers sémantiques** (tags mal classés).
 - **Relations :** Heatmap de similarité entre clusters pour identifier les **Super-Genres**.
 
+### 8. Ontology_and_Diachronic_Analysis.ipynb
+**Rôle :** Vers une Ontologie Dynamique du Gameplay (Axe de recherche final).
+- **Hiérarchisation (Subsumption) :** Application de la règle de Sanderson & Croft (1999) pour identifier les relations Parent-Enfant. Mise en évidence des genres "piliers" (Action, Shooter, RPG) et de leurs sous-genres (ex: Shooter -> FPS).
+- **Analyse Diachronique (Spéciation) :** Mesure de la dérive sémantique par le **PMI (Pointwise Mutual Information)** sur la période 2010-2025. Étude de cas sur l'autonomisation du genre *Roguelite* par rapport au *Roguelike*.
+- **Complexité Sémantique :** Utilisation de l'**Entropie de Shannon** pour quantifier l'hybridité des jeux (moyenne de 0.95), illustrant la tendance à la fusion des genres dans le design moderne.
+
 ## Scripts de Traitement et Maintenance
 
 ### New_Games_Gameplay_Taxonomy_Creation.py
@@ -61,6 +67,16 @@ Ce document détaille la raison d'être et la méthodologie de chaque fichier pr
 - **Source :** Extraction Kaggle (Steam Games Dataset).
 - **Logique :** Filtrage post-2024, application de la taxonomie enrichie (Horror, Exploration, etc.), normalisation automatique et stratégie de repli (Fallback) sur les genres officiels si les tags sont absents.
 - **Livrables :** `New_Games_Gameplay_Taxonomy.csv` et `final_test_set_15k.csv`.
+- **Scripts additionnels :** `Generate_Cluster_Validation_Tasks.py` permet de générer des échantillons de validation pour un crowdsourcing (évaluation de l'accord inter-juges).
 
 ## Dépendances
 Le fichier `requirements.txt` contient l'ensemble des bibliothèques nécessaires (Pandas, Scikit-learn, NetworkX, XGBoost, mlxtend, sentence-transformers, plotly, etc.).
+
+## Bibliographie et Références Scientifiques
+*   **Aarseth, E. et al. (2003).** *A multidimensional typology of games.*
+*   **Hamilton, W. L. et al. (2016).** *Diachronic Word Embeddings Reveal Statistical Laws of Semantic Change.* (Utilisé pour l'approche PMI de la dérive sémantique).
+*   **Hsu, G. (2006).** *Jacks of all trades and masters of none: Audiences' reactions to spanning genres in feature film production.* (Utilisé pour le concept de complexité sémantique et l'Entropie de Shannon).
+*   **Li, Q., & Zhang, J. (2015).** *Folksonomy-based genre classification of video games.*
+*   **Lu, Y. et al. (2010).** *Expert vs. Folksonomy Classification: A Comparison Study.*
+*   **Sanderson, M., & Croft, B. (1999).** *Deriving concept hierarchies from text.* (Utilisé pour l'algorithme de Subsumption).
+*   **Windleharth, T. W. et al. (2016).** *Full Steam Ahead: A conceptual analysis of user-supplied tags on Steam.* (Utilisé pour la taxonomie VGMS de base).

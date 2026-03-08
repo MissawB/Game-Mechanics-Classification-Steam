@@ -99,15 +99,11 @@ print("Chargement de la base initiale...")
 initial_taxonomy_path = os.path.join(base_dir, "../data/Games_Gameplay_Taxonomy.csv")
 df_initial = pd.read_csv(initial_taxonomy_path)
 
-# On retire game_release_date pour correspondre au format de New_Games_Gameplay_Taxonomy.csv
-if 'game_release_date' in df_initial.columns:
-    df_initial = df_initial.drop(columns=['game_release_date'])
-
 # 3. Chargement des Nouveaux Jeux depuis Kaggle
 print("Téléchargement et chargement du dataset Kaggle...")
 # Le dataset Kaggle contient 'games.csv'
 kaggle_file = "games.csv"
-df_kaggle = kagglehub.load_dataset(
+df_kaggle = kagglehub.dataset_load(
     KaggleDatasetAdapter.PANDAS,
     "fronkongames/steam-games-dataset",
     kaggle_file,
@@ -152,7 +148,8 @@ processed_data = df_new_games.apply(process_tags, axis=1, result_type='expand')
 # Reconstruction du DataFrame pour les nouveaux jeux
 df_new_structured = pd.DataFrame({
     'game_id': df_new_games['AppID'],
-    'game_name': df_new_games['Name']
+    'game_name': df_new_games['Name'],
+    'game_release_date': df_new_games['Release date'].dt.strftime('%y%m%d')
 })
 df_new_structured = pd.concat([df_new_structured, processed_data], axis=1)
 
@@ -160,7 +157,7 @@ df_new_structured = pd.concat([df_new_structured, processed_data], axis=1)
 print("Fusion des bases de données...")
 # S'assurer que les colonnes sont dans le même ordre
 dimensions = ["Aesthetics", "Genre", "Mechanics", "Mood", "Perspective", "Players", "Setting", "Theme"]
-cols_order = ["game_id", "game_name"] + dimensions
+cols_order = ["game_id", "game_name", "game_release_date"] + dimensions
 
 df_initial = df_initial[cols_order]
 df_new_structured = df_new_structured[cols_order]
