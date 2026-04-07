@@ -1,54 +1,73 @@
-# 🎮 Steam Folksonomy Analysis & Game Mechanics Classification
+# 🎮 Steam Gameplay Taxonomy & Computational Ludology
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
-[![Data Science](https://img.shields.io/badge/Data-Science-orange.svg)](https://pandas.pydata.org/)
-[![Machine Learning](https://img.shields.io/badge/Machine-Learning-green.svg)](https://scikit-learn.org/)
-[![NLP](https://img.shields.io/badge/NLP-Deep--Learning-red.svg)](https://sbert.net/)
+[![Framework](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B.svg)](https://streamlit.io/)
+[![Machine Learning](https://img.shields.io/badge/ML-Stacking--Ensemble-green.svg)](https://scikit-learn.org/)
+[![NLP](https://img.shields.io/badge/NLP-BERT--Embeddings-red.svg)](https://sbert.net/)
 
 ## 📌 Présentation du Projet
+Ce projet de recherche en **ludologie computationnelle** explore la structure profonde du game design à travers le prisme de la **folksonomie de Steam**. En analysant les données de plus de **126 000 jeux**, nous transformons la "sagesse des foules" (tags utilisateurs) en une **ontologie multidimensionnelle** rigoureuse, validée par des cadres théoriques académiques.
 
-Ce projet de recherche explore comment les **folksonomies** (systèmes de tags collaboratifs) peuvent être exploitées pour classifier les jeux vidéo au-delà des catégories marketing traditionnelles. En analysant les données de plus de **126 000 jeux Steam**, nous cherchons à transformer un système de tags bruité en une structure de métadonnées ludologiques fiable et précise.
-
-### ❓ Problématique
-
-> **"Comment exploiter une folksonomie utilisateur non-supervisée et bruitée (les tags Steam) afin d’établir des règles d’association fiables permettant de caractériser les mécaniques de jeu ?"**
+### ❓ La Question de Recherche
+> **"Comment passer d'une folksonomie utilisateur bruitée à une ontologie structurée des mécaniques de jeu capable de modéliser l'évolution du design et l'hybridité des genres ?"**
 
 ---
 
-## 🚀 Pipeline d'Analyse
+## 🚀 Fonctionnalités Clés
 
-L'approche est structurée en huit étapes clés, allant de l'exploration initiale à l'analyse diachronique :
-
-1. **Exploration de la Base de Données** : Analyse initiale de la structure SQLite et premières extractions de règles d'association via l'algorithme FP-Growth.
-2. **Taxonomie du Gameplay** : Restructuration sémantique basée sur le *Video Game Metadata Schema* (VGMS), mappant les tags dans 8 dimensions (Genre, Mechanics, Theme, Setting, etc.).
-3. **Analyse de Réseau & Co-occurrence** : Visualisation des affinités de design en utilisant le **Lift** pour identifier les corrélations significatives entre mécaniques et genres.
-4. **Clustering Folksonomique** : Découverte de structures émergentes via divers algorithmes (Louvain, OPTICS, K-Medoids) pour identifier les "genres réels" pratiqués par les joueurs.
-5. **Validation Expert vs Folksonomie** : Confrontation des classifications officielles de Steam avec les tags utilisateurs pour démontrer la plus-value descriptive de la folksonomie.
-6. **Classification par Machine Learning** : Modélisation prédictive (Random Forest, XGBoost) pour automatiser la classification des jeux.
-7. **Enrichissement NLP & Deep Learning** : Utilisation de **Sentence-BERT** pour le nommage automatique des clusters et l'analyse sémantique profonde.
-8. **Ontologie & Analyse Diachronique** : Construction d'une hiérarchie de genres (Subsumption) et mesure de la dérive sémantique (PMI) pour cartographier l'évolution du langage des joueurs.
+*   **📊 Dashboard Interactif** : Une interface **Streamlit** pour explorer les réseaux d'affinités, les cartes sémantiques et les évolutions temporelles.
+*   **🧬 Taxonomie VGMS** : Structuration du gameplay en 8 dimensions (Genre, Mechanics, Theme, Mood, Aesthetics, Perspective, Setting, Players).
+*   **🤖 Classification Avancée** : Pipeline de Machine Learning utilisant un **Stacking Classifier** (Random Forest + XGBoost) avec équilibrage de classes par **SMOTE**.
+*   **🧠 Sémantique Profonde** : Utilisation de **BERT** (`all-mpnet-base-v2`) pour aligner l'usage social des tags avec leur sens linguistique.
+*   **📈 Analyse Diachronique** : Modélisation de la "spéciation" des genres (ex: Roguelike vs Roguelite) via le **PMI** temporel et l'**Entropie de Shannon**.
 
 ---
 
-## 🛠️ Stack Technique
+## 🛠️ Installation et Utilisation
 
-* **Data & Analyse** : `Pandas`, `NumPy`, `SQLite`
-* **Visualisation & Réseau** : `Matplotlib`, `Seaborn`, `NetworkX`, `Plotly` (3D interactive)
-* **Machine Learning** : `Scikit-learn`, `XGBoost`, `imbalanced-learn` (SMOTE), `mlxtend` (FP-Growth)
-* **Deep Learning & NLP** : `Sentence-Transformers` (S-BERT), `PyTorch`, `Transformers`
-* **Environnement** : `Jupyter Notebook`
+### 1. Installation
+```bash
+git clone https://github.com/votre-repo/Game-Mechanics-Classification-Steam.git
+cd Game-Mechanics-Classification-Steam
+pip install -r requirements.txt
+```
+
+### 2. Lancer l'Exploration (Dashboard)
+```bash
+streamlit run dashboard.py
+```
+
+### 3. Pipeline de Mise à Jour (Nouveaux Jeux)
+```bash
+python scripts/New_Games_Gameplay_Taxonomy_Creation.py
+```
 
 ---
 
-## 📂 Structure du Dépôt
+## 🔬 Méthodologie en 8 Étapes
+
+Le projet est articulé autour de 8 notebooks de recherche (`analysis/`) :
+
+1.  **Exploration** : Nettoyage de la donnée et extraction de motifs via **FP-Growth**.
+2.  **Taxonomie** : Mapping sémantique vers le standard **VGMS**.
+3.  **Réseaux** : Calcul du **Lift** pour cartographier les affinités de design.
+4.  **Clustering** : Détection de communautés via l'**Algorithme de Louvain**.
+5.  **Comparaison** : Quantification du fossé sémantique entre **Experts (Éditeurs)** et **Foule (Joueurs)**.
+6.  **ML** : Validation de la structure via la prédiction automatisée (Accuracy ~51% en multi-label).
+7.  **NLP** : Analyse de la cohérence sémantique par embeddings BERT.
+8.  **Ontologie** : Création de hiérarchies par **Subsumption** ($P(Parent|Enfant) \ge 0.8$).
+
+---
+
+## 📂 Architecture du Dépôt
 
 ```text
-├── analysis/           # Notebooks Jupyter (étapes 1 à 8 du pipeline)
-├── data/               # Bases de données SQLite et exports CSV (Taxonomie)
-├── docs/               # Documentation détaillée des fichiers et méthodologie
-├── reports/            # Rapports de synthèse et de cohérence
-├── scripts/            # Scripts de pré-traitement et utilitaires
-├── biblio/             # Ressources académiques
+├── analysis/           # Notebooks de recherche (étapes 1 à 8)
+├── data/               # Bases SQLite (126k jeux) et Exports CSV
+├── docs/               # Documentation détaillée et définitions théoriques
+├── reports/            # Rapports de validation et de cohérence
+├── scripts/            # Pipelines de production, modèles BERT et ML
+├── dashboard.py        # Interface Streamlit interactive
 └── requirements.txt    # Dépendances du projet
 ```
 
@@ -73,6 +92,12 @@ Le projet s'appuie sur des travaux académiques de référence :
 | **Aarseth et al.** (2003) | *A multidimensional typology of games* | Fondements de la classification multidimensionnelle. |
 | **Swink** (2009) | *Game Feel: A Game Designer's Guide* | Définition des mécaniques et de la boucle de gameplay. |
 
-## 🔗 Ressources Externes
+---
 
-**Bibliographie complète** : Retrouvez l'ensemble de nos sources sur notre [Librairie Zotero Groupée](https://www.zotero.org/groups/6288352/pdr_stearn/library).
+## 🔗 Liens et Documentation
+*   **Documentation Complète** : [docs/Analysis_Files_Documentation.md](docs/Analysis_Files_Documentation.md)
+*   **Définitions Ludologiques** : [docs/Ludological_Terms_Definitions.md](docs/Ludological_Terms_Definitions.md)
+*   **Bibliographie** : Retrouvez nos sources sur notre [Librairie Zotero](https://www.zotero.org/groups/6288352/pdr_stearn/library).
+
+---
+*Projet de recherche "Game Mechanics Classification Steam" - 2025-2026*
