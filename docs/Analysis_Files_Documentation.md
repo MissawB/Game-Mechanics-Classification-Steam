@@ -1,82 +1,97 @@
-# Documentation des Fichiers d'Analyse - Classification des Mécaniques Steam
+# Documentation Scientifique et Technique : Ontologie Dynamique du Gameplay Steam
 
-## Introduction
-Ce document détaille la raison d'être et la méthodologie de chaque fichier présent dans le répertoire `analysis/`, ainsi que les rapports de validation associés. L'objectif global est de transformer une folksonomie non-supervisée (tags Steam) en une base de données de mécaniques de jeu structurée, validée par des métriques de cohérence et enrichie par des modèles de Machine Learning. Le projet couvre désormais plus de 126 000 jeux uniques.
+## 1. Vision et Contexte de Recherche
+Ce projet s'inscrit dans le champ de la **ludologie computationnelle** et des **sciences de l'information**. Il part d'un constat critique : les classifications traditionnelles des jeux vidéo (genres marketing comme "Action" ou "Aventure") sont devenues insuffisantes pour décrire la complexité et l'hybridité du design contemporain.
 
-## Description des Fichiers d'Analyse
+L'objectif est de construire une **ontologie multidimensionnelle** en exploitant la "sagesse des foules" (folksonomie Steam) et de la valider par des cadres théoriques académiques. Nous passons d'une vision statique du genre à une vision dynamique basée sur les **affinités de mécaniques**.
 
-### 1. First_Data_Base_Analysis.ipynb
-**Rôle :** Exploration initiale de la folksonomie Steam.
-- Identifie les tables clés de la base SQLite originale (`games`, `tags`, `game_tag`).
-- Analyse la distribution des tags (Loi de Pareto) et identifie le bruit initial.
-- **Règles d'association :** Première extraction de relations fortes via l'algorithme **FP-Growth** (ex: liens NSFW/Hentai isolés du gameplay).
+---
 
-### 2. Gameplay_Tag_Taxonomy.ipynb
-**Rôle :** Restructuration sémantique et création de la taxonomie de référence.
-- **Base théorique :** S'appuie sur le *Video Game Metadata Schema* (VGMS) et les travaux de Windleharth et al.
-- **Action :** Filtre les tags de distribution, normalise les variantes (Rogue-like vs Roguelike) et classe les tags dans 8 dimensions (Genre, Mechanics, Theme, Setting, Mood, Aesthetics, Perspective, Players).
-- **Sortie :** Génère `data/Games_Gameplay_Taxonomy.csv`.
+## 2. État de l'Art et Fondements Théoriques
 
-### 3. Network_Analysis_Cooccurrence.ipynb
-**Rôle :** Analyse de réseau et affinités de design.
-- **Méthodologie :** Utilise le **Lift** pour identifier les corrélations non-aléatoires entre dimensions.
-- **Topologie :** Identification de trois écosystèmes distincts (Puzzles, Visual Novels, et le "Grand Continent" Roguelike/RPG).
-- **Centralité :** Repère les tags "Hubs" (Sandbox, Management) et les "Ponts" (Strategy, Turn-Based Combat).
-- **Analyse Temporelle :** Évolution de la popularité des genres et mécaniques de 2010 à 2025.
+### A. Folksonomie vs Classification Expert
+Le projet s'appuie sur les travaux de **Windleharth et al. (2016)** qui démontrent que les tags utilisateurs sur Steam, bien que "bruyants", capturent des nuances de gameplay (ex: "Permadeath", "Procedural Generation") que les métadonnées officielles ignorent. Nous explorons le concept de "fossé sémantique" entre la perception des joueurs et les étiquettes des éditeurs (**Lu et al., 2010**).
 
-### 4. Folksonomic_Clustering_Analysis.ipynb
-**Rôle :** Découverte de genres émergents par clustering non-supervisé.
-- **Approche :** Similarité de cosinus sur la présence des tags.
-- **Méthodes :** 
-    - **Algorithme de Louvain :** Détection de 42 communautés sémantiques.
-    - **Validation :** Score de Silhouette, Index Davies-Bouldin et test de **stabilité par Bootstrap**.
-- **Exploration :** Visualisation **t-SNE 3D interactive** et analyse de la "longue traîne" via OPTICS (détection du bruit).
-- **Temporalité :** Suivi de l'émergence et de la croissance des clusters dans le temps.
+### B. Le Schéma VGMS (Video Game Metadata Schema)
+Pour structurer les données, nous utilisons le standard **VGMS (Lee et al., 2013)**. Ce schéma propose 8 dimensions fondamentales (Genre, Mechanics, Theme, Mood, Aesthetics, Perspective, Setting, Players) qui permettent de décomposer un jeu en unités sémantiques atomiques.
 
-### 5. Expert_vs_Folksonomy_Comparison.ipynb
-**Rôle :** Étude du fossé entre classifications officielles et perception des joueurs.
-- **Action :** Compare les genres officiels (Experts) et les tags (Folksonomie).
-- **Richesse :** Démontre que les joueurs apportent 1.6x plus d'informations descriptives que les experts.
-- **Accord Temporel :** Mise en évidence d'un **fossé grandissant** : les joueurs sont de moins en moins d'accord avec les étiquettes officielles sur les jeux récents.
-- **Mapping :** Heatmap de correspondance montrant comment les genres officiels se projettent sur les réalités du gameplay folksonomique.
+### C. Ontologie et Hiérarchie
+Nous appliquons les principes de **Zagal et al. (2005)** sur l'ontologie des jeux pour définir les relations de dépendance entre mécaniques. L'algorithme de subsumption de **Sanderson & Croft (1999)** est utilisé pour extraire automatiquement les hiérarchies basées sur les probabilités conditionnelles.
 
-### 6. Machine_Learning_Classification.ipynb
-**Rôle :** Modélisation prédictive du genre principal.
-- **Ingénierie :** Encodage multi-hot et **sélection de caractéristiques via test Chi2** (réduction du bruit).
-- **Modèles :** Random Forest, XGBoost et **Stacking Classifier** (méta-modèle Gradient Boosting).
-- **Rigueur :** Utilisation de la **Validation Croisée Stratifiée** et gestion du déséquilibre des classes via SMOTE.
-- **Diagnostic :** Analyse de l'importance des caractéristiques pour chaque grand genre.
+### D. Analyse Diachronique et Dérive Sémantique
+Le projet utilise les lois statistiques du changement sémantique de **Hamilton et al. (2016)** pour mesurer comment les concepts de gameplay évoluent dans le temps via le **PMI (Pointwise Mutual Information)** temporel.
 
-### 7. NLP_Deep_Learning_Enrichment.ipynb
-**Rôle :** Analyse sémantique fine par Embeddings.
-- **Technologie :** Utilisation de modèles **Transformer (BERT)** avancés (`all-mpnet-base-v2`).
-- **Nommage Automatique :** Identification des labels de clusters par calcul de centroïde sémantique.
-- **Cohérence :** Analyse de la variance intra-cluster et détection des **outliers sémantiques** (tags mal classés).
-- **Relations :** Heatmap de similarité entre clusters pour identifier les **Super-Genres**.
+---
 
-### 8. Ontology_and_Diachronic_Analysis.ipynb
-**Rôle :** Vers une Ontologie Dynamique du Gameplay (Axe de recherche final).
-- **Hiérarchisation (Subsumption) :** Application de la règle de Sanderson & Croft (1999) pour identifier les relations Parent-Enfant. Mise en évidence des genres "piliers" (Action, Shooter, RPG) et de leurs sous-genres (ex: Shooter -> FPS).
-- **Analyse Diachronique (Spéciation) :** Mesure de la dérive sémantique par le **PMI (Pointwise Mutual Information)** sur la période 2010-2025. Étude de cas sur l'autonomisation du genre *Roguelite* par rapport au *Roguelike*.
-- **Complexité Sémantique :** Utilisation de l'**Entropie de Shannon** pour quantifier l'hybridité des jeux (moyenne de 0.95), illustrant la tendance à la fusion des genres dans le design moderne.
+## 3. Méthodologie : L'Approche Hybride (Data Science & Ludologie)
 
-## Scripts de Traitement et Maintenance
+Le projet suit une pipeline de recherche rigoureuse en 5 phases :
 
-### New_Games_Gameplay_Taxonomy_Creation.py
-**Rôle :** Pipeline d'automatisation et mise à jour de la base.
-- **Source :** Extraction Kaggle (Steam Games Dataset).
-- **Logique :** Filtrage post-2024, application de la taxonomie enrichie (Horror, Exploration, etc.), normalisation automatique et stratégie de repli (Fallback) sur les genres officiels si les tags sont absents.
-- **Livrables :** `New_Games_Gameplay_Taxonomy.csv` et `final_test_set_15k.csv`.
-- **Scripts additionnels :** `Generate_Cluster_Validation_Tasks.py` permet de générer des échantillons de validation pour un crowdsourcing (évaluation de l'accord inter-juges).
+### Phase I : Découverte et Nettoyage (`Notebook 1`)
+- **Analyse de Pareto** : Identification des tags dominants et élimination de la "longue traîne" non-informative (seuil de présence < 1%).
+- **FP-Growth** : Extraction des itemsets fréquents pour repérer les corrélations triviales (ex: *RPG* + *Fantasy*).
 
-## Dépendances
-Le fichier `requirements.txt` contient l'ensemble des bibliothèques nécessaires (Pandas, Scikit-learn, NetworkX, XGBoost, mlxtend, sentence-transformers, plotly, etc.).
+### Phase II : Structuration Taxonomique (`Notebook 2 & 3`)
+- **Normalisation** : Correction des variantes orthographiques (ex: *Roguelike* vs *Rogue-like*).
+- **Lift Sémantique** : $Lift(A, B) = \frac{P(A \cap B)}{P(A) \cdot P(B)}$. Cette métrique permet d'identifier les affinités de design qui transcendent la simple popularité brute des tags.
 
-## Bibliographie et Références Scientifiques
-*   **Aarseth, E. et al. (2003).** *A multidimensional typology of games.*
-*   **Hamilton, W. L. et al. (2016).** *Diachronic Word Embeddings Reveal Statistical Laws of Semantic Change.* (Utilisé pour l'approche PMI de la dérive sémantique).
-*   **Hsu, G. (2006).** *Jacks of all trades and masters of none: Audiences' reactions to spanning genres in feature film production.* (Utilisé pour le concept de complexité sémantique et l'Entropie de Shannon).
-*   **Li, Q., & Zhang, J. (2015).** *Folksonomy-based genre classification of video games.*
-*   **Lu, Y. et al. (2010).** *Expert vs. Folksonomy Classification: A Comparison Study.*
-*   **Sanderson, M., & Croft, B. (1999).** *Deriving concept hierarchies from text.* (Utilisé pour l'algorithme de Subsumption).
-*   **Windleharth, T. W. et al. (2016).** *Full Steam Ahead: A conceptual analysis of user-supplied tags on Steam.* (Utilisé pour la taxonomie VGMS de base).
+### Phase III : Validation par le Clustering (`Notebook 4 & 7`)
+- **Clustering de Louvain** : Basé sur la modularité du graphe de co-occurrence. Validation par le **Score de Silhouette** et l'**Index de Davies-Bouldin**.
+- **Embeddings BERT** : Utilisation du modèle `all-mpnet-base-v2` pour projeter les tags dans un espace vectoriel de 768 dimensions.
+- **AMI (Adjusted Mutual Information)** : Mesure de la concordance entre la structure d'usage (joueurs) et la structure linguistique (modèle de langue).
+
+### Phase IV : Modélisation Prédictive (`Notebook 6`)
+- **Ingénierie de Features** : Sélection via **Test Chi2** pour identifier les descripteurs les plus discriminants par genre.
+- **Ensemble Learning** : Utilisation d'un **Stacking Classifier** (Random Forest, XGBoost) avec équilibrage de classes par **SMOTE**.
+
+### Phase V : Analyse de l'Ontologie et Hybridité (`Notebook 8`)
+- **Subsumption Statistique** : Un tag $A$ est parent de $B$ si $P(A|B) \ge 0.8$ et $P(B|A) < 0.8$.
+- **Entropie de Shannon** : $H = -\sum p_i \log_2(p_i)$ appliquée aux vecteurs de dimensions pour quantifier l'hybridité (mélange des genres) d'un titre.
+
+---
+
+## 4. Validation et Fiabilité
+
+Le projet inclut des boucles de rétroaction pour assurer la pérennité de l'ontologie (voir dossier `reports/`) :
+
+- **`classification_consistency_report.md`** : Analyse de la couverture sur les jeux récents (post-2024). Mesure la robustesse de la taxonomie face aux nouveaux titres.
+- **`clustering_consistency_report.md`** : Calcul de l'**Indice de Rand Ajusté (ARI)** pour valider la stabilité des groupes sémantiques entre les différentes méthodes (Graphes vs NLP).
+- **Stabilité par Bootstrap** : Les clusters de Louvain sont testés par ré-échantillonnage pour garantir que la structure n'est pas un artefact statistique local.
+
+---
+
+## 5. Architecture des Données
+
+### Tables Sources (SQLite)
+- `games` : AppID, Name, Release Date, Score.
+- `game_tag` : Relation N-N entre jeux et tags.
+- `game_genre` : Classifications officielles (Baseline Expert).
+
+### Livrables de Recherche
+- `data/Games_Gameplay_Taxonomy.csv` : Dataset pivot pour les futures études ludologiques.
+- `data/Folksonomic_Clusters.csv` : Cartographie des 42 communautés de gameplay.
+
+---
+
+## 6. Guide des Analyses (Notebooks)
+
+| Notebook | Focus Scientifique | Métriques Clés |
+| :--- | :--- | :--- |
+| `1_Basics` | Qualité de la donnée | Fréquence de Pareto, Règles d'association |
+| `2_Taxonomy` | Standardisation | VGMS Mapping |
+| `3_Network` | Affinités de design | Lift, Centralité de degré |
+| `4_Clustering` | Taxonomie émergente | Modularité, Silhouette, DB Index |
+| `5_Comparison` | Étude sociologique | Taux d'accord, Richesse descriptive |
+| `6_ML` | Valeur prédictive | Accuracy, F1-Score, Confusion Matrix |
+| `7_NLP` | Sémantique profonde | Cosine Similarity, Variance intra-cluster |
+| `8_Ontology` | Théorie de l'évolution | PMI, Subsumption, Entropie de Shannon |
+
+---
+
+## 7. Bibliographie de Référence
+- **Aarseth, E., et al. (2003)**. *A multidimensional typology of games*.
+- **Hamilton, W. L., et al. (2016)**. *Diachronic Word Embeddings Reveal Statistical Laws of Semantic Change*.
+- **Lee, Y., et al. (2013)**. *Video Game Metadata Schema: Standards for Content Description*.
+- **Sanderson, M., & Croft, B. (1999)**. *Deriving concept hierarchies from text*.
+- **Windleharth, T., et al. (2016)**. *Full Steam Ahead: A conceptual analysis of user-supplied tags on Steam*.
+- **Zagal, J. P., et al. (2005)**. *Towards a Game Ontology*.
