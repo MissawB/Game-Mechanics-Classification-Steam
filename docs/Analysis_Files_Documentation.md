@@ -77,14 +77,14 @@ Le projet inclut des boucles de rétroaction pour assurer la pérennité de l'on
 
 | Notebook | Focus Scientifique | Métriques Clés |
 | :--- | :--- | :--- |
-| `1_Basics` | Qualité de la donnée | Fréquence de Pareto, Règles d'association |
-| `2_Taxonomy` | Standardisation | VGMS Mapping |
-| `3_Network` | Affinités de design | Lift, Centralité de degré |
-| `4_Clustering` | Taxonomie émergente | Modularité, Silhouette, DB Index |
-| `5_Comparison` | Étude sociologique | Taux d'accord, Richesse descriptive |
-| `6_ML` | Valeur prédictive | Accuracy, F1-Score, Confusion Matrix |
-| `7_NLP` | Sémantique profonde | Cosine Similarity, Variance intra-cluster |
-| `8_Ontology` | Théorie de l'évolution | PMI, Subsumption, Entropie de Shannon |
+| `1_First_Data_Base_Analysis.ipynb` | Qualité de la donnée | Fréquence de Pareto, FP-Growth |
+| `2_Gameplay_Tag_Taxonomy.ipynb` | Standardisation | VGMS Mapping Coverage |
+| `3_Network_Analysis_Cooccurrence.ipynb` | Affinités de design | Lift, Degree Centrality |
+| `4_Folksonomic_Clustering_Analysis.ipynb` | Taxonomie émergente | Louvain Modularity, Silhouette |
+| `5_Expert_vs_Folksonomy_Comparison.ipynb` | Étude sociologique | Taux d'accord (Experts vs Foule) |
+| `6_Machine_Learning_Classification.ipynb` | Valeur prédictive | Accuracy (~51%), F1-Score |
+| `7_NLP_Deep_Learning_Enrichment.ipynb` | Sémantique profonde | BERT Leader Match (73.8%), AMI |
+| `8_Ontology_and_Diachronic_Analysis.ipynb` | Théorie de l'évolution | PMI, Subsumption Probabilities |
 
 ---
 

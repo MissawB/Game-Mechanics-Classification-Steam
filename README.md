@@ -15,11 +15,10 @@ Ce projet de recherche en **ludologie computationnelle** explore la structure pr
 
 ## 🚀 Fonctionnalités Clés
 
-*   **📊 Dashboard Interactif** : Une interface **Streamlit** pour explorer les réseaux d'affinités, les cartes sémantiques et les évolutions temporelles.
-*   **🧬 Taxonomie VGMS** : Structuration du gameplay en 8 dimensions (Genre, Mechanics, Theme, Mood, Aesthetics, Perspective, Setting, Players).
-*   **🤖 Classification Avancée** : Pipeline de Machine Learning utilisant un **Stacking Classifier** (Random Forest + XGBoost) avec équilibrage de classes par **SMOTE**.
-*   **🧠 Sémantique Profonde** : Utilisation de **BERT** (`all-mpnet-base-v2`) pour aligner l'usage social des tags avec leur sens linguistique.
-*   **📈 Analyse Diachronique** : Modélisation de la "spéciation" des genres (ex: Roguelike vs Roguelite) via le **PMI** temporel et l'**Entropie de Shannon**.
+*   **📊 Analyse Multidimensionnelle** : Structuration du gameplay en 8 dimensions VGMS (Genre, Mechanics, Theme, Mood, Aesthetics, Perspective, Setting, Players).
+*   **🤖 Classification Automatisée** : Pipeline de Machine Learning utilisant un **Stacking Classifier** (Random Forest + XGBoost) pour valider la structure des tags.
+*   **🧠 Sémantique NLP** : Utilisation de **BERT** (`all-mpnet-base-v2`) pour aligner l'usage social des tags avec leur sens linguistique.
+*   **📈 Évolution du Design** : Modélisation de la hiérarchie des genres et des mécaniques via la **Subsumption** et le **PMI** temporel.
 
 ---
 
@@ -32,12 +31,7 @@ cd Game-Mechanics-Classification-Steam
 pip install -r requirements.txt
 ```
 
-### 2. Lancer l'Exploration (Dashboard)
-```bash
-streamlit run dashboard.py
-```
-
-### 3. Pipeline de Mise à Jour (Nouveaux Jeux)
+### 2. Pipeline de Mise à Jour (Nouveaux Jeux)
 ```bash
 python scripts/New_Games_Gameplay_Taxonomy_Creation.py
 ```
@@ -48,14 +42,14 @@ python scripts/New_Games_Gameplay_Taxonomy_Creation.py
 
 Le projet est articulé autour de 8 notebooks de recherche (`analysis/`) :
 
-1.  **Exploration** : Nettoyage de la donnée et extraction de motifs via **FP-Growth**.
-2.  **Taxonomie** : Mapping sémantique vers le standard **VGMS**.
-3.  **Réseaux** : Calcul du **Lift** pour cartographier les affinités de design.
-4.  **Clustering** : Détection de communautés via l'**Algorithme de Louvain**.
-5.  **Comparaison** : Quantification du fossé sémantique entre **Experts (Éditeurs)** et **Foule (Joueurs)**.
-6.  **ML** : Validation de la structure via la prédiction automatisée (Accuracy ~51% en multi-label).
-7.  **NLP** : Analyse de la cohérence sémantique par embeddings BERT.
-8.  **Ontologie** : Création de hiérarchies par **Subsumption** ($P(Parent|Enfant) \ge 0.8$).
+1.  **Exploration** (`1_First_Data_Base_Analysis.ipynb`) : Nettoyage et motifs fréquents via **FP-Growth**.
+2.  **Taxonomie** (`2_Gameplay_Tag_Taxonomy.ipynb`) : Mapping sémantique vers le standard **VGMS**.
+3.  **Réseaux** (`3_Network_Analysis_Cooccurrence.ipynb`) : Calcul du **Lift** et affinités de design.
+4.  **Clustering** (`4_Folksonomic_Clustering_Analysis.ipynb`) : Détection de communautés via l'**Algorithme de Louvain**.
+5.  **Comparaison** (`5_Expert_vs_Folksonomy_Comparison.ipynb`) : Fossé sémantique entre **Éditeurs** et **Joueurs**.
+6.  **ML** (`6_Machine_Learning_Classification.ipynb`) : Validation par prédiction multi-label (Accuracy ~51%).
+7.  **NLP** (`7_NLP_Deep_Learning_Enrichment.ipynb`) : Analyse de cohérence par embeddings **BERT**.
+8.  **Ontologie** (`8_Ontology_and_Diachronic_Analysis.ipynb`) : Hiérarchies par **Subsumption** et analyse temporelle.
 
 ---
 
@@ -63,11 +57,10 @@ Le projet est articulé autour de 8 notebooks de recherche (`analysis/`) :
 
 ```text
 ├── analysis/           # Notebooks de recherche (étapes 1 à 8)
-├── data/               # Bases SQLite (126k jeux) et Exports CSV
-├── docs/               # Documentation détaillée et définitions théoriques
-├── reports/            # Rapports de validation et de cohérence
-├── scripts/            # Pipelines de production, modèles BERT et ML
-├── dashboard.py        # Interface Streamlit interactive
+├── data/               # Bases SQLite et Exports CSV (Folksonomic_Clusters.csv)
+├── docs/               # Documentation détaillée et définitions VGMS
+├── reports/            # Rapports de cohérence (classification, clustering)
+├── scripts/            # Modèles BERT adaptés et scripts de production
 └── requirements.txt    # Dépendances du projet
 ```
 
